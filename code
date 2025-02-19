@@ -1,50 +1,72 @@
 import React from 'react';
-import { Text, SafeAreaView, StyleSheet, View, Image } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, View, ImageBackground, ScrollView } from 'react-native';
 
 export default function App() {
-  // Simulated weather data for Islamabad
+  // Simulated weather data for Islamabad (rainy theme)
   const weatherData = {
     city: 'Islamabad',
-    temperature: '22°C',
-    condition: 'Sunny',
-    highLow: 'H: 24°C L: 18°C',
-    icon: 'https://cdn.iconscout.com/icon/free/png-256/free-sunny-weather-1-458124.png', // Sunny icon
+    temperature: '18°C',
+    condition: 'Rainy',
+    highLow: 'H: 20°C L: 16°C',
+    icon: '🌧️', // Rainy icon
+    hourlyForecast: [
+      { time: 'Now', icon: '🌧️', temp: '18°C' },
+      { time: '1PM', icon: '🌧️', temp: '19°C' },
+      { time: '2PM', icon: '🌧️', temp: '20°C' },
+      { time: '3PM', icon: '⛅', temp: '19°C' },
+      { time: '4PM', icon: '🌧️', temp: '18°C' },
+      { time: '5PM', icon: '🌧️', temp: '17°C' },
+    ],
+    weeklyForecast: [
+      { day: 'Mon', icon: '🌧️', high: '20°C', low: '16°C' },
+      { day: 'Tue', icon: '🌧️', high: '19°C', low: '15°C' },
+      { day: 'Wed', icon: '🌧️', high: '18°C', low: '14°C' },
+      { day: 'Thu', icon: '⛅', high: '19°C', low: '15°C' },
+      { day: 'Fri', icon: '🌧️', high: '20°C', low: '16°C' },
+      { day: 'Sat', icon: '🌧️', high: '21°C', low: '17°C' },
+      { day: 'Sun', icon: '⛅', high: '22°C', low: '18°C' },
+    ],
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Weather Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerText}>{weatherData.city}</Text>
-        <Text style={styles.subHeaderText}>Current Weather</Text>
-      </View>
+      {/* Islamabad Background Image */}
+      <ImageBackground
+        source={{ uri: 'https://www.thenews.com.pk/assets/uploads/updates/2023-11-01/1138047_015941_updates.jpg' }} // Islamabad image
+        style={styles.backgroundImage}
+      >
+        {/* Current Weather Section */}
+        <View style={styles.currentWeather}>
+          <Text style={styles.city}>{weatherData.city}</Text>
+          <Text style={styles.temperature}>{weatherData.temperature}</Text>
+          <Text style={styles.condition}>{weatherData.condition}</Text>
+          <Text style={styles.highLow}>{weatherData.highLow}</Text>
+        </View>
 
-      {/* Weather Icon and Temperature */}
-      <View style={styles.weatherInfo}>
-        <Image
-          source={{ uri: weatherData.icon }}
-          style={styles.weatherIcon}
-        />
-        <Text style={styles.temperature}>{weatherData.temperature}</Text>
-        <Text style={styles.condition}>{weatherData.condition}</Text>
-        <Text style={styles.highLow}>{weatherData.highLow}</Text>
-      </View>
+        {/* Hourly Forecast Section */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.hourlyForecast}>
+          {weatherData.hourlyForecast.map((item, index) => (
+            <View key={index} style={styles.hourlyItem}>
+              <Text style={styles.hourlyTime}>{item.time}</Text>
+              <Text style={styles.hourlyIcon}>{item.icon}</Text>
+              <Text style={styles.hourlyTemp}>{item.temp}</Text>
+            </View>
+          ))}
+        </ScrollView>
 
-      {/* Additional Weather Details */}
-      <View style={styles.detailsContainer}>
-        <View style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Humidity</Text>
-          <Text style={styles.detailValue}>45%</Text>
+        {/* Weekly Forecast Section */}
+        <View style={styles.weeklyForecast}>
+          {weatherData.weeklyForecast.map((item, index) => (
+            <View key={index} style={styles.weeklyItem}>
+              <Text style={styles.weeklyDay}>{item.day}</Text>
+              <Text style={styles.weeklyIcon}>{item.icon}</Text>
+              <Text style={styles.weeklyTemp}>
+                {item.high} / {item.low}
+              </Text>
+            </View>
+          ))}
         </View>
-        <View style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Wind</Text>
-          <Text style={styles.detailValue}>10 km/h</Text>
-        </View>
-        <View style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Visibility</Text>
-          <Text style={styles.detailValue}>10 km</Text>
-        </View>
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 }
@@ -52,63 +74,108 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#87CEEB', // Light blue background for a sky-like feel
   },
-  header: {
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  currentWeather: {
     alignItems: 'center',
-    marginTop: 40,
-    marginBottom: 20,
+    marginTop: 50,
   },
-  headerText: {
+  city: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#fff', // White text
-  },
-  subHeaderText: {
-    fontSize: 16,
     color: '#fff',
-  },
-  weatherInfo: {
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  weatherIcon: {
-    width: 120,
-    height: 120,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)', // Text shadow for better readability
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   temperature: {
     fontSize: 48,
     fontWeight: 'bold',
     color: '#fff',
     marginTop: 10,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   condition: {
     fontSize: 24,
     color: '#fff',
     marginTop: 10,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   highLow: {
     fontSize: 18,
     color: '#fff',
     marginTop: 5,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
-  detailsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 40,
-    paddingHorizontal: 20,
+  hourlyForecast: {
+    marginTop: 30,
+    paddingHorizontal: 10,
   },
-  detailItem: {
+  hourlyItem: {
     alignItems: 'center',
+    marginHorizontal: 15,
   },
-  detailLabel: {
+  hourlyTime: {
     fontSize: 16,
     color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
-  detailValue: {
+  hourlyIcon: {
+    fontSize: 24,
+    marginVertical: 5,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+  },
+  hourlyTemp: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: '#fff',
-    marginTop: 5,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+  },
+  weeklyForecast: {
+    marginTop: 30,
+    paddingHorizontal: 20,
+  },
+  weeklyItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  weeklyDay: {
+    fontSize: 18,
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+  },
+  weeklyIcon: {
+    fontSize: 24,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+  },
+  weeklyTemp: {
+    fontSize: 18,
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
 });
